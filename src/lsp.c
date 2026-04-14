@@ -372,10 +372,19 @@ static void handle_completion(js_val_t *id, js_val_t *params)
         mino_val_t *cur = all_syms;
         while (cur && !mino_is_nil(cur) && mino_is_cons(cur)) {
             mino_val_t *sym = mino_car(cur);
-            const char *name;
-            size_t      nlen;
+            const char *name = NULL;
+            size_t      nlen = 0;
 
-            if (sym && mino_to_string(sym, &name, &nlen)) {
+            /* apropos returns symbols; extract name from either type. */
+            if (sym) {
+                if (sym->type == MINO_SYMBOL || sym->type == MINO_STRING ||
+                    sym->type == MINO_KEYWORD) {
+                    name = sym->as.s.data;
+                    nlen = sym->as.s.len;
+                }
+            }
+
+            if (name && nlen > 0) {
                 /* Filter by prefix. */
                 int match = 1;
                 if (pfx) {
