@@ -21,9 +21,10 @@
 /* Server state                                                         */
 /* -------------------------------------------------------------------- */
 
-static mino_env_t *lsp_env         = NULL;
-static int         initialized     = 0;
-static int         shutdown_called = 0;
+static mino_state_t *lsp_state       = NULL;
+static mino_env_t   *lsp_env         = NULL;
+static int           initialized     = 0;
+static int           shutdown_called = 0;
 
 /* -------------------------------------------------------------------- */
 /* Transport helpers                                                    */
@@ -239,10 +240,11 @@ static void handle_initialize(js_val_t *id, js_val_t *params)
 
     lsp_send_response(id, result);
 
-    /* Initialize the mino environment. */
-    if (!lsp_env) {
-        lsp_env = mino_env_new();
-        mino_install_core(lsp_env);
+    /* Initialize the mino runtime and environment. */
+    if (!lsp_state) {
+        lsp_state = mino_state_new();
+        lsp_env   = mino_env_new(lsp_state);
+        mino_install_core(lsp_state, lsp_env);
         /* No mino_install_io -- LSP env has no I/O side effects. */
     }
 }
@@ -265,9 +267,11 @@ static int handle_exit(js_val_t *id, js_val_t *params)
 {
     (void)id;
     (void)params;
-    if (lsp_env) {
-        mino_env_free(lsp_env);
+    if (lsp_state) {
+        mino_env_free(lsp_state, lsp_env);
         lsp_env = NULL;
+        mino_state_free(lsp_state);
+        lsp_state = NULL;
     }
     return 1; /* signal main loop to exit */
 }
@@ -287,7 +291,7 @@ static void handle_did_open(js_val_t *id, js_val_t *params)
 
     doc_open(uri, text, strlen(text),
              (int)js_object_get_int(td, "version", 0));
-    diagnostic_check(uri, text, lsp_env);
+    diagnostic_check(uri, text, lsp_state, lsp_env);
 }
 
 static void handle_did_change(js_val_t *id, js_val_t *params)
@@ -312,7 +316,7 @@ static void handle_did_change(js_val_t *id, js_val_t *params)
 
     doc_change(uri, text, strlen(text),
                (int)js_object_get_int(td, "version", 0));
-    diagnostic_check(uri, text, lsp_env);
+    diagnostic_check(uri, text, lsp_state, lsp_env);
 }
 
 static void handle_did_close(js_val_t *id, js_val_t *params)
@@ -364,9 +368,9 @@ static void handle_completion(js_val_t *id, js_val_t *params)
     items = js_array_new();
 
     /* Get all symbols via (apropos ""). */
-    mino_set_limit(MINO_LIMIT_STEPS, 100000);
-    all_syms = mino_eval_string("(apropos \"\")", lsp_env);
-    mino_set_limit(MINO_LIMIT_STEPS, 0);
+    mino_set_limit(lsp_state, MINO_LIMIT_STEPS, 100000);
+    all_syms = mino_eval_string(lsp_state, "(apropos \"\")", lsp_env);
+    mino_set_limit(lsp_state, MINO_LIMIT_STEPS, 0);
 
     if (all_syms) {
         mino_val_t *cur = all_syms;
@@ -492,9 +496,9 @@ static void handle_hover(js_val_t *id, js_val_t *params)
 
         /* Try to get docstring via (doc sym). */
         snprintf(expr, sizeof(expr), "(doc '%s)", sym);
-        mino_set_limit(MINO_LIMIT_STEPS, 100000);
+        mino_set_limit(lsp_state, MINO_LIMIT_STEPS, 100000);
         {
-            mino_val_t *doc_result = mino_eval_string(expr, lsp_env);
+            mino_val_t *doc_result = mino_eval_string(lsp_state, expr, lsp_env);
             const char *docstr = NULL;
             size_t      doclen = 0;
 
@@ -509,7 +513,7 @@ static void handle_hover(js_val_t *id, js_val_t *params)
                 snprintf(hover_buf, sizeof(hover_buf),
                          "**%s** *:%s*", sym, type_name);
         }
-        mino_set_limit(MINO_LIMIT_STEPS, 0);
+        mino_set_limit(lsp_state, MINO_LIMIT_STEPS, 0);
 
         result = js_object_new();
         contents = js_object_new();

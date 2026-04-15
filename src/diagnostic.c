@@ -80,20 +80,21 @@ static void publish(const char *uri, js_val_t *diag_array)
     js_free(params);
 }
 
-void diagnostic_check(const char *uri, const char *content, mino_env_t *env)
+void diagnostic_check(const char *uri, const char *content,
+                      mino_state_t *S, mino_env_t *env)
 {
     const char *cursor = content;
     js_val_t   *arr    = js_array_new();
 
     /* Set step limit to prevent infinite loops during eval. */
-    mino_set_limit(MINO_LIMIT_STEPS, 100000);
+    mino_set_limit(S, MINO_LIMIT_STEPS, 100000);
 
     for (;;) {
         const char   *end  = NULL;
-        mino_val_t   *form = mino_read(cursor, &end);
+        mino_val_t   *form = mino_read(S, cursor, &end);
 
         if (!form) {
-            const char *err = mino_last_error();
+            const char *err = mino_last_error(S);
             if (err && err[0] != '\0') {
                 /* Parse error. Estimate line from cursor position. */
                 int line = count_lines(content, end ? end : cursor);
@@ -104,9 +105,9 @@ void diagnostic_check(const char *uri, const char *content, mino_env_t *env)
 
         /* Attempt eval for semantic errors. */
         {
-            mino_val_t *result = mino_eval(form, env);
+            mino_val_t *result = mino_eval(S, form, env);
             if (!result) {
-                const char *err = mino_last_error();
+                const char *err = mino_last_error(S);
                 if (err && err[0] != '\0') {
                     int         line = 0;
                     const char *msg;
@@ -128,7 +129,7 @@ void diagnostic_check(const char *uri, const char *content, mino_env_t *env)
     }
 
     /* Reset step limit. */
-    mino_set_limit(MINO_LIMIT_STEPS, 0);
+    mino_set_limit(S, MINO_LIMIT_STEPS, 0);
 
     publish(uri, arr);
     /* arr is freed inside publish via js_free(params) which frees children */

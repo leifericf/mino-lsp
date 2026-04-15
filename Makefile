@@ -1,10 +1,10 @@
 CC      ?= cc
 CFLAGS  ?= -std=c99 -Wall -Wpedantic -Wextra -O2
-SRCS     = src/main.c src/json.c src/lsp.c src/document.c src/diagnostic.c mino/mino.c
+SRCS     = src/main.c src/json.c src/lsp.c src/document.c src/diagnostic.c mino/mino.c mino/re.c
 TARGET   = mino-lsp
 
-$(TARGET): $(SRCS) src/json.h src/lsp.h src/document.h src/diagnostic.h mino/mino.h
-	$(CC) $(CFLAGS) -Imino -Isrc -o $@ $(SRCS)
+$(TARGET): $(SRCS) src/json.h src/lsp.h src/document.h src/diagnostic.h mino/mino.h mino/re.h
+	$(CC) $(CFLAGS) -Imino -Isrc -o $@ $(SRCS) -lm
 
 test: $(TARGET)
 	tests/test_lsp.sh
