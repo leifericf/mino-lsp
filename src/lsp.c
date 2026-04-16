@@ -492,6 +492,7 @@ static void handle_hover(js_val_t *id, js_val_t *params)
         case MINO_ATOM:      type_name = "atom";      break;
         case MINO_LAZY:      type_name = "lazy-seq";  break;
         case MINO_TAIL_CALL: type_name = "tail-call"; break;
+        case MINO_REDUCED:   type_name = "reduced";   break;
         }
 
         /* Try to get docstring via (doc sym). */
