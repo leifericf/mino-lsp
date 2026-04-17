@@ -1,11 +1,17 @@
 CC      ?= cc
 CFLAGS  ?= -std=c99 -Wall -Wpedantic -Wextra -O2
-MINO_SRCS = mino/src/mino.c mino/src/eval_special.c mino/src/runtime_state.c \
+MINO_SRCS = mino/src/mino.c mino/src/eval_special.c \
+            mino/src/eval_special_defs.c mino/src/eval_special_bindings.c \
+            mino/src/eval_special_control.c mino/src/eval_special_fn.c \
+            mino/src/runtime_state.c \
             mino/src/runtime_error.c mino/src/runtime_env.c mino/src/runtime_gc.c \
-            mino/src/val.c mino/src/vec.c mino/src/map.c mino/src/read.c \
+            mino/src/val.c mino/src/vec.c mino/src/map.c \
+            mino/src/read.c \
             mino/src/print.c mino/src/prim.c mino/src/prim_numeric.c \
             mino/src/prim_collections.c mino/src/prim_sequences.c \
-            mino/src/prim_string.c mino/src/prim_io.c mino/src/clone.c \
+            mino/src/prim_string.c mino/src/prim_io.c mino/src/prim_reflection.c \
+            mino/src/prim_meta.c mino/src/prim_regex.c mino/src/prim_stateful.c \
+            mino/src/prim_module.c mino/src/clone.c \
             mino/src/re.c
 SRCS     = src/main.c src/json.c src/lsp.c src/document.c src/diagnostic.c $(MINO_SRCS)
 TARGET   = mino-lsp
