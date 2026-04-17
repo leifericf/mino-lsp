@@ -5,7 +5,7 @@ MINO_SRCS = mino/src/mino.c mino/src/eval_special.c \
             mino/src/eval_special_control.c mino/src/eval_special_fn.c \
             mino/src/runtime_state.c \
             mino/src/runtime_error.c mino/src/runtime_env.c mino/src/runtime_gc.c \
-            mino/src/val.c mino/src/vec.c mino/src/map.c \
+            mino/src/val.c mino/src/vec.c mino/src/map.c mino/src/rbtree.c \
             mino/src/read.c \
             mino/src/print.c mino/src/prim.c mino/src/prim_numeric.c \
             mino/src/prim_collections.c mino/src/prim_sequences.c \
