@@ -1,3 +1,6 @@
 mino-lsp
 *.o
 *.dSYM/
+
+# Local working files
+.local/
