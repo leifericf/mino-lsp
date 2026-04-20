@@ -1,6 +1,6 @@
 CC      ?= cc
 CFLAGS  ?= -std=c99 -Wall -Wpedantic -Wextra -O2
-MINO_SRCS = mino/src/mino.c mino/src/eval_special.c \
+MINO_SRCS = mino/src/mino.c mino/src/diag.c mino/src/eval_special.c \
             mino/src/eval_special_defs.c mino/src/eval_special_bindings.c \
             mino/src/eval_special_control.c mino/src/eval_special_fn.c \
             mino/src/runtime_state.c mino/src/runtime_var.c \
@@ -21,7 +21,7 @@ SRCS     = src/main.c src/json.c src/lsp.c src/document.c src/diagnostic.c $(MIN
 TARGET   = mino-lsp
 
 $(TARGET): $(SRCS) src/json.h src/lsp.h src/document.h src/diagnostic.h \
-           mino/src/mino.h mino/src/mino_internal.h mino/src/prim_internal.h \
+           mino/src/mino.h mino/src/mino_internal.h mino/src/diag.h mino/src/prim_internal.h \
            mino/src/re.h
 	$(CC) $(CFLAGS) -Imino/src -Isrc -o $@ $(SRCS) -lm
 
