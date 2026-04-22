@@ -4,11 +4,15 @@ MINO_SRCS = mino/src/mino.c mino/src/diag.c mino/src/eval_special.c \
             mino/src/eval_special_defs.c mino/src/eval_special_bindings.c \
             mino/src/eval_special_control.c mino/src/eval_special_fn.c \
             mino/src/runtime_state.c mino/src/runtime_var.c \
-            mino/src/runtime_error.c mino/src/runtime_env.c mino/src/runtime_gc.c \
+            mino/src/runtime_error.c mino/src/runtime_env.c \
+            mino/src/runtime_gc.c mino/src/runtime_gc_roots.c \
+            mino/src/runtime_gc_major.c mino/src/runtime_gc_barrier.c \
+            mino/src/runtime_gc_minor.c mino/src/public_gc.c \
             mino/src/val.c mino/src/vec.c mino/src/map.c mino/src/rbtree.c \
             mino/src/read.c \
             mino/src/print.c mino/src/prim.c mino/src/prim_numeric.c \
             mino/src/prim_collections.c mino/src/prim_sequences.c \
+            mino/src/prim_lazy.c \
             mino/src/prim_string.c mino/src/prim_io.c mino/src/prim_reflection.c \
             mino/src/prim_meta.c mino/src/prim_regex.c mino/src/prim_stateful.c \
             mino/src/prim_module.c \
