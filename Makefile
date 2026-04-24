@@ -8,6 +8,7 @@ MINO_SRCS = mino/src/mino.c mino/src/diag.c mino/src/eval_special.c \
             mino/src/runtime_gc.c mino/src/runtime_gc_roots.c \
             mino/src/runtime_gc_major.c mino/src/runtime_gc_barrier.c \
             mino/src/runtime_gc_minor.c mino/src/runtime_gc_trace.c \
+            mino/src/runtime_module.c \
             mino/src/transient.c \
             mino/src/public_gc.c mino/src/public_embed.c \
             mino/src/val.c mino/src/vec.c mino/src/map.c mino/src/rbtree.c \
