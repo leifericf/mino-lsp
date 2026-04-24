@@ -473,26 +473,31 @@ static void handle_hover(js_val_t *id, js_val_t *params)
 
         /* Get type name. */
         switch (val->type) {
-        case MINO_NIL:     type_name = "nil";     break;
-        case MINO_BOOL:    type_name = "boolean"; break;
-        case MINO_INT:     type_name = "integer"; break;
-        case MINO_FLOAT:   type_name = "float";   break;
-        case MINO_STRING:  type_name = "string";  break;
-        case MINO_SYMBOL:  type_name = "symbol";  break;
-        case MINO_KEYWORD: type_name = "keyword"; break;
-        case MINO_CONS:    type_name = "list";    break;
-        case MINO_VECTOR:  type_name = "vector";  break;
-        case MINO_MAP:     type_name = "map";     break;
-        case MINO_SET:     type_name = "set";     break;
-        case MINO_PRIM:    type_name = "primitive"; break;
-        case MINO_FN:      type_name = "function"; break;
-        case MINO_MACRO:   type_name = "macro";   break;
-        case MINO_HANDLE:  type_name = "handle";  break;
-        case MINO_RECUR:     type_name = "recur";     break;
-        case MINO_ATOM:      type_name = "atom";      break;
-        case MINO_LAZY:      type_name = "lazy-seq";  break;
-        case MINO_TAIL_CALL: type_name = "tail-call"; break;
-        case MINO_REDUCED:   type_name = "reduced";   break;
+        case MINO_NIL:        type_name = "nil";        break;
+        case MINO_BOOL:       type_name = "boolean";    break;
+        case MINO_INT:        type_name = "integer";    break;
+        case MINO_FLOAT:      type_name = "float";      break;
+        case MINO_CHAR:       type_name = "character";  break;
+        case MINO_STRING:     type_name = "string";     break;
+        case MINO_SYMBOL:     type_name = "symbol";     break;
+        case MINO_KEYWORD:    type_name = "keyword";    break;
+        case MINO_CONS:       type_name = "list";       break;
+        case MINO_VECTOR:     type_name = "vector";     break;
+        case MINO_MAP:        type_name = "map";        break;
+        case MINO_SET:        type_name = "set";        break;
+        case MINO_SORTED_MAP: type_name = "sorted-map"; break;
+        case MINO_SORTED_SET: type_name = "sorted-set"; break;
+        case MINO_PRIM:       type_name = "primitive";  break;
+        case MINO_FN:         type_name = "function";   break;
+        case MINO_MACRO:      type_name = "macro";      break;
+        case MINO_HANDLE:     type_name = "handle";     break;
+        case MINO_RECUR:      type_name = "recur";      break;
+        case MINO_ATOM:       type_name = "atom";       break;
+        case MINO_LAZY:       type_name = "lazy-seq";   break;
+        case MINO_TAIL_CALL:  type_name = "tail-call";  break;
+        case MINO_REDUCED:    type_name = "reduced";    break;
+        case MINO_VAR:        type_name = "var";        break;
+        case MINO_TRANSIENT:  type_name = "transient";  break;
         }
 
         /* Try to get docstring via (doc sym). */
