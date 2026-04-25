@@ -477,6 +477,9 @@ static void handle_hover(js_val_t *id, js_val_t *params)
         case MINO_BOOL:       type_name = "boolean";    break;
         case MINO_INT:        type_name = "integer";    break;
         case MINO_FLOAT:      type_name = "float";      break;
+        case MINO_BIGINT:     type_name = "bigint";     break;
+        case MINO_RATIO:      type_name = "ratio";      break;
+        case MINO_BIGDEC:     type_name = "bigdec";     break;
         case MINO_CHAR:       type_name = "character";  break;
         case MINO_STRING:     type_name = "string";     break;
         case MINO_SYMBOL:     type_name = "symbol";     break;

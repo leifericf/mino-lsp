@@ -14,6 +14,7 @@ MINO_SRCS = mino/src/mino.c mino/src/diag.c mino/src/eval_special.c \
             mino/src/val.c mino/src/vec.c mino/src/map.c mino/src/rbtree.c \
             mino/src/read.c \
             mino/src/print.c mino/src/prim.c mino/src/prim_numeric.c \
+            mino/src/prim_bignum.c mino/src/vendor/imath.c \
             mino/src/prim_collections.c mino/src/prim_sequences.c \
             mino/src/prim_lazy.c \
             mino/src/prim_string.c mino/src/prim_io.c mino/src/prim_reflection.c \
