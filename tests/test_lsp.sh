@@ -116,7 +116,7 @@ send("initialized", {})
 # --- Test: didOpen with valid code (expect empty diagnostics) ---
 send("textDocument/didOpen", {
     "textDocument": {
-        "uri": "file:///test/valid.mino",
+        "uri": "file:///test/valid.clj",
         "languageId": "mino",
         "version": 1,
         "text": "(def x 42)\n",
@@ -137,7 +137,7 @@ else:
 # --- Test: didOpen with parse error ---
 send("textDocument/didOpen", {
     "textDocument": {
-        "uri": "file:///test/broken.mino",
+        "uri": "file:///test/broken.clj",
         "languageId": "mino",
         "version": 1,
         "text": "(def x\n",
@@ -145,7 +145,7 @@ send("textDocument/didOpen", {
 })
 
 diag = recv_until(lambda m: m.get("method") == "textDocument/publishDiagnostics"
-                  and m.get("params", {}).get("uri") == "file:///test/broken.mino")
+                  and m.get("params", {}).get("uri") == "file:///test/broken.clj")
 if diag:
     diags = diag.get("params", {}).get("diagnostics", [])
     if len(diags) > 0:
@@ -162,7 +162,7 @@ else:
 
 # --- Test: completion ---
 send("textDocument/completion", {
-    "textDocument": {"uri": "file:///test/valid.mino"},
+    "textDocument": {"uri": "file:///test/valid.clj"},
     "position": {"line": 0, "character": 1},
 }, msg_id=2)
 
@@ -187,7 +187,7 @@ else:
 # --- Test: completion with prefix ---
 send("textDocument/didOpen", {
     "textDocument": {
-        "uri": "file:///test/prefix.mino",
+        "uri": "file:///test/prefix.clj",
         "languageId": "mino",
         "version": 1,
         "text": "(ma",
@@ -195,10 +195,10 @@ send("textDocument/didOpen", {
 })
 # Consume diagnostics notification.
 recv_until(lambda m: m.get("method") == "textDocument/publishDiagnostics"
-           and m.get("params", {}).get("uri") == "file:///test/prefix.mino")
+           and m.get("params", {}).get("uri") == "file:///test/prefix.clj")
 
 send("textDocument/completion", {
-    "textDocument": {"uri": "file:///test/prefix.mino"},
+    "textDocument": {"uri": "file:///test/prefix.clj"},
     "position": {"line": 0, "character": 3},
 }, msg_id=3)
 
@@ -221,7 +221,7 @@ else:
 # --- Test: hover on builtin ---
 send("textDocument/didOpen", {
     "textDocument": {
-        "uri": "file:///test/hover.mino",
+        "uri": "file:///test/hover.clj",
         "languageId": "mino",
         "version": 1,
         "text": "map\n",
@@ -229,10 +229,10 @@ send("textDocument/didOpen", {
 })
 # Consume diagnostics.
 recv_until(lambda m: m.get("method") == "textDocument/publishDiagnostics"
-           and m.get("params", {}).get("uri") == "file:///test/hover.mino")
+           and m.get("params", {}).get("uri") == "file:///test/hover.clj")
 
 send("textDocument/hover", {
-    "textDocument": {"uri": "file:///test/hover.mino"},
+    "textDocument": {"uri": "file:///test/hover.clj"},
     "position": {"line": 0, "character": 1},
 }, msg_id=4)
 
@@ -253,7 +253,7 @@ else:
 
 # --- Test: hover on unknown symbol ---
 send("textDocument/hover", {
-    "textDocument": {"uri": "file:///test/hover.mino"},
+    "textDocument": {"uri": "file:///test/hover.clj"},
     "position": {"line": 0, "character": 100},
 }, msg_id=5)
 
@@ -265,12 +265,12 @@ else:
 
 # --- Test: didChange triggers new diagnostics ---
 send("textDocument/didChange", {
-    "textDocument": {"uri": "file:///test/valid.mino", "version": 2},
+    "textDocument": {"uri": "file:///test/valid.clj", "version": 2},
     "contentChanges": [{"text": "(def y\n"}],
 })
 
 diag = recv_until(lambda m: m.get("method") == "textDocument/publishDiagnostics"
-                  and m.get("params", {}).get("uri") == "file:///test/valid.mino")
+                  and m.get("params", {}).get("uri") == "file:///test/valid.clj")
 if diag:
     diags = diag.get("params", {}).get("diagnostics", [])
     if len(diags) > 0:
@@ -282,11 +282,11 @@ else:
 
 # --- Test: didClose clears diagnostics ---
 send("textDocument/didClose", {
-    "textDocument": {"uri": "file:///test/broken.mino"},
+    "textDocument": {"uri": "file:///test/broken.clj"},
 })
 
 diag = recv_until(lambda m: m.get("method") == "textDocument/publishDiagnostics"
-                  and m.get("params", {}).get("uri") == "file:///test/broken.mino")
+                  and m.get("params", {}).get("uri") == "file:///test/broken.clj")
 if diag:
     diags = diag.get("params", {}).get("diagnostics", [])
     if len(diags) == 0:
