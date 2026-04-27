@@ -4,6 +4,17 @@ All notable changes to mino-lsp are documented here.
 
 ## Unreleased
 
+- Tracking mino v0.74.0 (deferred core surface): `*ns*` as a real var,
+  `bound-fn` / `bound-fn*`, `read` with options, `clojure.edn/read`,
+  `destructure`, and regex capture groups with `re-matcher` /
+  `re-groups`. No LSP-side changes needed; hover and completion pick
+  up the new surface through the existing primitive enumeration.
+- Tracking mino v0.73.0 (first-class namespaces): each namespace owns
+  its own root binding table, vars are first-class objects, auto-
+  resolved keywords and namespaced map literals land at read time,
+  and source files use `.clj` instead of `.mino`. LSP test fixtures
+  and document URIs swap to `.clj` alongside the migration. Makefile
+  picks up the new `runtime/ns_env.c` and `runtime/path_buf.c` TUs.
 - Tracking mino v0.48.0: character type (`MINO_CHAR`), sorted
   collections (`MINO_SORTED_MAP`, `MINO_SORTED_SET`), first-class vars
   (`MINO_VAR`), transients (`MINO_TRANSIENT`), and the structured
