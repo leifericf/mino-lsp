@@ -4,6 +4,21 @@ All notable changes to mino-lsp are documented here.
 
 ## Unreleased
 
+- Tracking mino v0.96.8 (Canon-Parity cycle: real `MINO_VOLATILE`
+  primitive, stateful-transducer rewrites, lazy-seq recur-on-skip,
+  transient reductions, comp/partial/some-fn/every-pred unrolling
+  plus `into` 0/1-arg and `unchecked-divide-int`, `iteration` from
+  Clojure 1.11, `clojure.core.async` namespace wrap with `merge`/`into`
+  renames, the `:refer :all` transitive-drag fix, and the chunked-seq
+  family with two new value types — `MINO_CHUNK` and
+  `MINO_CHUNKED_CONS` — plus eight primitives). The new primitives
+  surface automatically through the primitive table that backs
+  completion and hover; the hover type-name switch in `src/lsp.c`
+  gains explicit cases for `MINO_VOLATILE` (rendered as `volatile`),
+  `MINO_CHUNK` (rendered as `chunk`), and `MINO_CHUNKED_CONS`
+  (rendered as `list`, matching the runtime), so hover on a value of
+  one of the new types reports the correct type-name instead of
+  `unknown`. The public C API is additive only.
 - Tracking mino v0.95.5 (Clojure-side hygiene pass: bundled stdlib
   refactor across `src/core.clj`, `lib/clojure/*`, `lib/core/*`, and
   `lib/mino/*`). No LSP-side changes — the hygiene pass is internal
