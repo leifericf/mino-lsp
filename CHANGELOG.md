@@ -4,6 +4,11 @@ All notable changes to mino-lsp are documented here.
 
 ## Unreleased
 
+- Tracking mino v0.93.0 (C refactoring pass; bundled `mino deps` and
+  `mino task` tooling; bootstrap Makefile). The Makefile gains three
+  gen-mino-header entries for the new `lib/mino/*` sources that v0.93.0
+  bakes into the binary. No LSP-side changes; hover and completion
+  continue to pick up new vars automatically.
 - Tracking mino v0.74.0 (deferred core surface): `*ns*` as a real var,
   `bound-fn` / `bound-fn*`, `read` with options, `clojure.edn/read`,
   `destructure`, and regex capture groups with `re-matcher` /
