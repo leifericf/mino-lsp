@@ -484,7 +484,11 @@ static void handle_hover(js_val_t *id, js_val_t *params)
         case MINO_STRING:     type_name = "string";     break;
         case MINO_SYMBOL:     type_name = "symbol";     break;
         case MINO_KEYWORD:    type_name = "keyword";    break;
+        case MINO_EMPTY_LIST: type_name = "list";       break;
         case MINO_CONS:       type_name = "list";       break;
+        case MINO_TYPE:       type_name = "record-type"; break;
+        case MINO_RECORD:     type_name = "record";     break;
+        case MINO_FUTURE:     type_name = "future";     break;
         case MINO_VECTOR:     type_name = "vector";     break;
         case MINO_MAP:        type_name = "map";        break;
         case MINO_SET:        type_name = "set";        break;

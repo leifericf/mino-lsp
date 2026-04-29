@@ -4,6 +4,11 @@ All notable changes to mino-lsp are documented here.
 
 ## Unreleased
 
+- Tracking mino v0.94.0 (empty-list canon parity). v0.94.0's
+  `MINO_EMPTY_LIST` enum entry surfaces in the hover type-name
+  switch as `list` (same display as `MINO_CONS`); also added the
+  pre-existing `MINO_TYPE`, `MINO_RECORD`, and `MINO_FUTURE` cases
+  so the `-Wswitch` warning stops firing.
 - Tracking mino v0.93.0 (C refactoring pass; bundled `mino deps` and
   `mino task` tooling; bootstrap Makefile). The Makefile gains three
   gen-mino-header entries for the new `lib/mino/*` sources that v0.93.0
