@@ -4,6 +4,11 @@ All notable changes to mino-lsp are documented here.
 
 ## Unreleased
 
+- Tracking mino v0.95.5 (Clojure-side hygiene pass: bundled stdlib
+  refactor across `src/core.clj`, `lib/clojure/*`, `lib/core/*`, and
+  `lib/mino/*`). No LSP-side changes — the hygiene pass is internal
+  to the mino-side library; the public C surface and bundled
+  primitive set are unchanged.
 - Tracking mino v0.94.0 (empty-list canon parity). v0.94.0's
   `MINO_EMPTY_LIST` enum entry surfaces in the hover type-name
   switch as `list` (same display as `MINO_CONS`); also added the
