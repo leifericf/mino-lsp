@@ -500,7 +500,10 @@ static void handle_hover(js_val_t *id, js_val_t *params)
         case MINO_HANDLE:     type_name = "handle";     break;
         case MINO_RECUR:      type_name = "recur";      break;
         case MINO_ATOM:       type_name = "atom";       break;
+        case MINO_VOLATILE:   type_name = "volatile";   break;
         case MINO_LAZY:       type_name = "lazy-seq";   break;
+        case MINO_CHUNK:      type_name = "chunk";      break;
+        case MINO_CHUNKED_CONS: type_name = "list";     break;
         case MINO_TAIL_CALL:  type_name = "tail-call";  break;
         case MINO_REDUCED:    type_name = "reduced";    break;
         case MINO_VAR:        type_name = "var";        break;
