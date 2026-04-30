@@ -48,6 +48,9 @@ $(eval $(call gen-mino-header,lib/clojure/core/protocols.clj,lib_clojure_core_pr
 $(eval $(call gen-mino-header,lib/clojure/instant.clj,lib_clojure_instant))
 $(eval $(call gen-mino-header,lib/clojure/spec/alpha.clj,lib_clojure_spec_alpha))
 $(eval $(call gen-mino-header,lib/clojure/core/specs/alpha.clj,lib_clojure_core_specs_alpha))
+$(eval $(call gen-mino-header,lib/clojure/test/check/generators.clj,lib_clojure_test_check_generators))
+$(eval $(call gen-mino-header,lib/clojure/test/check/properties.clj,lib_clojure_test_check_properties))
+$(eval $(call gen-mino-header,lib/clojure/test/check.clj,lib_clojure_test_check))
 $(eval $(call gen-mino-header,lib/mino/deps.clj,lib_mino_deps))
 $(eval $(call gen-mino-header,lib/mino/tasks.clj,lib_mino_tasks))
 $(eval $(call gen-mino-header,lib/mino/tasks/builtin.clj,lib_mino_tasks_builtin))
@@ -69,6 +72,9 @@ MINO_GEN_HEADERS = mino/src/core_mino.h \
                    mino/src/lib_clojure_instant.h \
                    mino/src/lib_clojure_spec_alpha.h \
                    mino/src/lib_clojure_core_specs_alpha.h \
+                   mino/src/lib_clojure_test_check_generators.h \
+                   mino/src/lib_clojure_test_check_properties.h \
+                   mino/src/lib_clojure_test_check.h \
                    mino/src/lib_mino_deps.h \
                    mino/src/lib_mino_tasks.h \
                    mino/src/lib_mino_tasks_builtin.h
