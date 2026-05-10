@@ -477,6 +477,7 @@ static void handle_hover(js_val_t *id, js_val_t *params)
         case MINO_BOOL:       type_name = "boolean";    break;
         case MINO_INT:        type_name = "integer";    break;
         case MINO_FLOAT:      type_name = "float";      break;
+        case MINO_FLOAT32:    type_name = "float";      break;
         case MINO_BIGINT:     type_name = "bigint";     break;
         case MINO_RATIO:      type_name = "ratio";      break;
         case MINO_BIGDEC:     type_name = "bigdec";     break;
@@ -491,6 +492,7 @@ static void handle_hover(js_val_t *id, js_val_t *params)
         case MINO_FUTURE:     type_name = "future";     break;
         case MINO_VECTOR:     type_name = "vector";     break;
         case MINO_MAP:        type_name = "map";        break;
+        case MINO_MAP_ENTRY:  type_name = "map-entry";  break;
         case MINO_SET:        type_name = "set";        break;
         case MINO_SORTED_MAP: type_name = "sorted-map"; break;
         case MINO_SORTED_SET: type_name = "sorted-set"; break;
@@ -508,6 +510,11 @@ static void handle_hover(js_val_t *id, js_val_t *params)
         case MINO_REDUCED:    type_name = "reduced";    break;
         case MINO_VAR:        type_name = "var";        break;
         case MINO_TRANSIENT:  type_name = "transient";  break;
+        case MINO_UUID:       type_name = "uuid";       break;
+        case MINO_REGEX:      type_name = "regex";      break;
+        case MINO_HOST_ARRAY: type_name = "host-array"; break;
+        case MINO_TX_REF:     type_name = "ref";        break;
+        case MINO_AGENT:      type_name = "agent";      break;
         }
 
         /* Try to get docstring via (doc sym). */
