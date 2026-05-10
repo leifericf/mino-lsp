@@ -4,6 +4,20 @@ All notable changes to mino-lsp are documented here.
 
 ## Unreleased
 
+- Tracking mino v0.103.0 (Worker-List Lock Split: brief
+  `worker_list_lock` separated from the recursive `state_lock` so
+  a tight embedder loop can no longer starve future / agent
+  worker entry-link or exit-detach. Lock order: state_lock outer,
+  worker_list_lock inner. The public C surface is unchanged and
+  `src/lsp.c` does not call any of the worker-bookkeeping paths,
+  so this is a drop-in submodule bump). The hover type-name
+  switch in `src/lsp.c` gains explicit cases for the seven
+  previously-unhandled value tags accumulated since the last
+  pass: `MINO_FLOAT32` (rendered as `float`),
+  `MINO_MAP_ENTRY` (`map-entry`), `MINO_UUID` (`uuid`),
+  `MINO_REGEX` (`regex`), `MINO_HOST_ARRAY` (`host-array`),
+  `MINO_TX_REF` (`ref`), `MINO_AGENT` (`agent`). The pre-existing
+  `-Wswitch` warning stops firing.
 - Tracking mino v0.102.1 (Agents finish MVP cycle: per-state agent
   workers + run-queues with separate POOLED / SOLO pools for
   `send` / `send-off`; public C-API perimeter for embedders
