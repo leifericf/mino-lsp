@@ -4,24 +4,20 @@ All notable changes to mino-lsp are documented here.
 
 ## Unreleased
 
-- Tracking mino v0.101.0 (STM cycle): refs, `dosync`, `alter`,
-  `commute`, `ensure`, `ref-set`, `io!`, watches and validators on
-  refs and vars; agents (`agent`, `send`, `send-off`, `await`,
-  `agent-error`, `restart-agent`, error-mode / error-handler);
-  Layer 2a C API mirroring the Clojure surface (`mino_tx_ref`,
-  `mino_tx_run`, `mino_tx_alter_c`, `mino_tx_commute_c`,
-  `mino_tx_ensure`, `mino_tx_ref_set`, `mino_tx_ref_deref`,
-  `mino_is_tx_ref`); cross-state ref defense via MST007;
-  `mino_pcall` API change adding an `out_ex` parameter; plus the
-  intermediate cycle of additions that landed since v0.98.5:
-  MINO_HOST_ARRAY, MINO_MAP_ENTRY, MINO_FLOAT32 value types;
-  strict integer overflow on `+`/`-`/`*`; `bigdec`÷`ratio` widens
-  to bigdec; `cons` returns non-list shape; `aset` for host
-  arrays; fixed-arity enforcement at fn apply. Submodule bumped
-  from `022b83a` (v0.98.5) to `b66c3e5` (v0.101.0). No lsp-side
-  code changes -- `src/` does not call `mino_pcall` and does not
-  depend on any of the removed-or-changed surfaces.
-
+- Tracking mino v0.102.1 (Agents finish MVP cycle: per-state agent
+  workers + run-queues with separate POOLED / SOLO pools for
+  `send` / `send-off`; public C-API perimeter for embedders
+  (`mino_send`, `mino_send_off`, `mino_await`, `mino_await_for`,
+  `mino_agent_error`, `mino_restart_agent`); `await` and
+  `await-for` now actually block; `shutdown-agents` joins both
+  pool workers; `restart-agent` accepts `:clear-actions true`;
+  v0.102.1 patch closed an adversarial-test pass with a doc
+  accuracy fix for the thread-budget message and added 11
+  `abort()` rationale comments + LOC allowlist updates).
+- Tracking mino v0.99.x — v0.101.1 (multiple cycles: typed-array
+  cycle, scoop pipeline, STM commit atomicity hardening,
+  agent cross-state defense + `mino_pcall` STM/agent
+  propagation; mino-lsp itself unchanged across these).
 - Tracking mino v0.98.5 (Hygiene + Closure cycle: macro hygiene fix
   in `qq_qualify_symbol` so syntax-quoted bare symbols inside a
   macro body qualify against the macro's defining namespace not the
