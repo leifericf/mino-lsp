@@ -4,6 +4,20 @@ All notable changes to mino-lsp are documented here.
 
 ## Unreleased
 
+- Tracking mino v0.105.0 through v0.144.5 (Bytecode-VM Cycle: a
+  lazily-compiled register-based bytecode VM that handles user
+  fns by default, with the tree-walker remaining as a fallback
+  for declined forms and top-level evaluation. Tight inner loops
+  now run within constant factors of Lua 5.5 on integer-counter
+  and arithmetic-chain shapes. The public C surface is unchanged
+  and `src/lsp.c` does not call any of the VM-internal paths,
+  so this is a drop-in submodule bump). Cycle release-pipeline
+  follow-ups also covered: GC fix that traces the compiled-
+  bytecode record through the remembered set (v0.144.1),
+  build-flag patches that silence gcc's `-Wclobbered` heuristic
+  across Linux gcc and Windows mingw (v0.144.2-v0.144.4), and
+  a real correctness fix in `OP_PUSHCATCH` for nested-try
+  re-throw on stricter compilers (v0.144.5).
 - Tracking mino v0.103.0 (Worker-List Lock Split: brief
   `worker_list_lock` separated from the recursive `state_lock` so
   a tight embedder loop can no longer starve future / agent
