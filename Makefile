@@ -8,6 +8,7 @@ MINO_SRCS = $(wildcard mino/src/public/*.c) \
             $(wildcard mino/src/runtime/*.c) \
             $(wildcard mino/src/gc/*.c) \
             $(wildcard mino/src/eval/*.c) \
+            $(wildcard mino/src/eval/bc/*.c) \
             $(wildcard mino/src/collections/*.c) \
             $(wildcard mino/src/prim/*.c) \
             $(wildcard mino/src/async/*.c) \
@@ -81,7 +82,7 @@ MINO_GEN_HEADERS = mino/src/core_mino.h \
 
 $(TARGET): $(SRCS) src/json.h src/lsp.h src/document.h src/diagnostic.h \
            mino/src/mino.h mino/src/diag/diag.h $(MINO_GEN_HEADERS)
-	$(CC) $(CFLAGS) $(MINO_INCS) -Isrc -o $@ $(SRCS) -lm
+	$(CC) $(CFLAGS) $(MINO_INCS) -Isrc -o $@ $(SRCS) -lm -lpthread
 
 test: $(TARGET)
 	tests/test_lsp.sh
