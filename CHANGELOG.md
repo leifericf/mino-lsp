@@ -4,6 +4,19 @@ All notable changes to mino-lsp are documented here.
 
 ## Unreleased
 
+- Tracking mino v0.145.0 through v0.149.1. Five minor cycles plus
+  the v0.149.1 bug-fix roll-up covering the hash contract for
+  sequential and sorted collections, sorted-collection dissoc
+  count, `ex-info` 3-arity cause, catch metadata preservation,
+  `fmt_ensure` / `(sh ...)` OOM cleanup, and the `pclose` `-1`
+  sentinel. The mino runtime added bytecode-VM source files under
+  `src/eval/bc/`; the Makefile's `MINO_SRCS` glob now includes
+  that subdirectory so the embedded runtime links the BC entry
+  points (`_mino_bc_run`, `_mino_bc_compile_fn`,
+  `_mino_bc_check_require`, `_mino_bc_declined`). The public C
+  surface is unchanged and `src/lsp.c` doesn't call any
+  VM-internal paths -- this is a drop-in submodule bump otherwise.
+
 - Tracking mino v0.105.0 through v0.144.5 (Bytecode-VM Cycle: a
   lazily-compiled register-based bytecode VM that handles user
   fns by default, with the tree-walker remaining as a fallback
