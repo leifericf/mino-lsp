@@ -9,6 +9,8 @@ MINO_SRCS = $(wildcard mino/src/public/*.c) \
             $(wildcard mino/src/gc/*.c) \
             $(wildcard mino/src/eval/*.c) \
             $(wildcard mino/src/eval/bc/*.c) \
+            $(wildcard mino/src/eval/bc/jit/*.c) \
+            $(wildcard mino/src/values/*.c) \
             $(wildcard mino/src/collections/*.c) \
             $(wildcard mino/src/prim/*.c) \
             $(wildcard mino/src/async/*.c) \

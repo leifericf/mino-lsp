@@ -21,8 +21,8 @@
 /* Server state                                                         */
 /* -------------------------------------------------------------------- */
 
-static mino_state_t *lsp_state       = NULL;
-static mino_env_t   *lsp_env         = NULL;
+static mino_state *lsp_state       = NULL;
+static mino_env   *lsp_env         = NULL;
 static int           initialized     = 0;
 static int           shutdown_called = 0;
 
@@ -244,7 +244,7 @@ static void handle_initialize(js_val_t *id, js_val_t *params)
     if (!lsp_state) {
         lsp_state = mino_state_new();
         lsp_env   = mino_env_new(lsp_state);
-        mino_install_core(lsp_state, lsp_env);
+        mino_install_all(lsp_state, lsp_env);
         /* No mino_install_io -- LSP env has no I/O side effects. */
     }
 }
@@ -343,7 +343,7 @@ static void handle_completion(js_val_t *id, js_val_t *params)
     long            off;
     char           *pfx;
     js_val_t       *items;
-    mino_val_t     *all_syms;
+    mino_val     *all_syms;
 
     td = js_object_get(params, "textDocument");
     pos_obj = js_object_get(params, "position");
@@ -368,23 +368,23 @@ static void handle_completion(js_val_t *id, js_val_t *params)
     items = js_array_new();
 
     /* Get all symbols via (apropos ""). */
-    mino_set_limit(lsp_state, MINO_LIMIT_STEPS, 100000);
-    all_syms = mino_eval_string(lsp_state, "(apropos \"\")", lsp_env);
-    mino_set_limit(lsp_state, MINO_LIMIT_STEPS, 0);
+    mino_set_option(lsp_state, MINO_OPT_LIMIT_STEPS, 100000);
+    all_syms = mino_eval_string(lsp_state, "(keys (ns-publics 'clojure.core))", lsp_env);
+    mino_set_option(lsp_state, MINO_OPT_LIMIT_STEPS, 0);
 
     if (all_syms) {
-        mino_val_t *cur = all_syms;
+        mino_val *cur = all_syms;
         while (cur && !mino_is_nil(cur) && mino_is_cons(cur)) {
-            mino_val_t *sym = mino_car(cur);
+            mino_val *sym = mino_car(cur);
             const char *name = NULL;
             size_t      nlen = 0;
 
             /* apropos returns symbols; extract name from either type. */
             if (sym) {
-                if (sym->type == MINO_SYMBOL || sym->type == MINO_STRING ||
-                    sym->type == MINO_KEYWORD) {
-                    name = sym->as.s.data;
-                    nlen = sym->as.s.len;
+                if (mino_is_symbol(sym) || mino_is_string(sym) ||
+                    mino_is_keyword(sym)) {
+                    name = mino_text_data(sym);
+                    nlen = mino_text_len(sym);
                 }
             }
 
@@ -398,7 +398,7 @@ static void handle_completion(js_val_t *id, js_val_t *params)
                 }
                 if (match) {
                     js_val_t   *item = js_object_new();
-                    mino_val_t *val;
+                    mino_val *val;
                     int         kind = 6; /* Variable */
 
                     js_object_set(item, "label", js_string(name, nlen));
@@ -406,9 +406,9 @@ static void handle_completion(js_val_t *id, js_val_t *params)
                     /* Determine CompletionItemKind from value type. */
                     val = mino_env_get(lsp_env, name);
                     if (val) {
-                        if (val->type == MINO_FN || val->type == MINO_PRIM)
+                        if (mino_is_fn(val) || mino_is_prim(val))
                             kind = 3; /* Function */
-                        else if (val->type == MINO_MACRO)
+                        else if (mino_is_macro(val))
                             kind = 14; /* Keyword */
                     }
                     js_object_set(item, "kind", js_int(kind));
@@ -431,7 +431,7 @@ static void handle_hover(js_val_t *id, js_val_t *params)
     lsp_document_t *doc;
     long            off;
     char           *sym;
-    mino_val_t     *val;
+    mino_val     *val;
 
     td = js_object_get(params, "textDocument");
     pos_obj = js_object_get(params, "position");
@@ -457,7 +457,12 @@ static void handle_hover(js_val_t *id, js_val_t *params)
         return;
     }
 
-    val = mino_env_get(lsp_env, sym);
+    {
+        char resolve_expr[300];
+        snprintf(resolve_expr, sizeof(resolve_expr),
+                 "(if-let [v (resolve '%s)] (deref v))", sym);
+        val = mino_eval_string(lsp_state, resolve_expr, lsp_env);
+    }
     if (!val) {
         free(sym);
         lsp_send_response(id, js_null());
@@ -472,7 +477,7 @@ static void handle_hover(js_val_t *id, js_val_t *params)
         js_val_t   *result, *contents;
 
         /* Get type name. */
-        switch (val->type) {
+        switch (mino_typeof(val)) {
         case MINO_NIL:        type_name = "nil";        break;
         case MINO_BOOL:       type_name = "boolean";    break;
         case MINO_INT:        type_name = "integer";    break;
@@ -519,9 +524,9 @@ static void handle_hover(js_val_t *id, js_val_t *params)
 
         /* Try to get docstring via (doc sym). */
         snprintf(expr, sizeof(expr), "(doc '%s)", sym);
-        mino_set_limit(lsp_state, MINO_LIMIT_STEPS, 100000);
+        mino_set_option(lsp_state, MINO_OPT_LIMIT_STEPS, 100000);
         {
-            mino_val_t *doc_result = mino_eval_string(lsp_state, expr, lsp_env);
+            mino_val *doc_result = mino_eval_string(lsp_state, expr, lsp_env);
             const char *docstr = NULL;
             size_t      doclen = 0;
 
@@ -536,7 +541,7 @@ static void handle_hover(js_val_t *id, js_val_t *params)
                 snprintf(hover_buf, sizeof(hover_buf),
                          "**%s** *:%s*", sym, type_name);
         }
-        mino_set_limit(lsp_state, MINO_LIMIT_STEPS, 0);
+        mino_set_option(lsp_state, MINO_OPT_LIMIT_STEPS, 0);
 
         result = js_object_new();
         contents = js_object_new();
